@@ -1,0 +1,17 @@
+package edu.unimag.dto.estudiante;
+
+import edu.unimag.modelo.enumeracion.EstadoEntidad;
+import java.util.UUID;
+
+public record EstudianteDto(
+        UUID id,
+        String codigo,
+        String nombre,
+        String correo,
+        String celular,
+        String direccion,
+        EstadoEntidad estado,
+        Boolean activo
+        ) {
+
+}

@@ -1,0 +1,376 @@
+@startuml
+
+' --- Configuracion Estetica Base ---
+skinparam defaultFontName Helvetica
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+skinparam classRoundCorner 0
+skinparam shadowing false
+skinparam monochrome false
+skinparam classBorderColor black
+skinparam backgroundColor white
+skinparam classBackgroundColor white
+
+' --- Paleta de Colores Pastel para Java 17 ---
+skinparam interfaceBackgroundColor #D5F5E3
+skinparam interface<<Interface>>BackgroundColor #D5F5E3
+skinparam class<<Interface>>BackgroundColor #D5F5E3
+skinparam abstractBackgroundColor #FFE5CC
+skinparam class<<Abstract>>BackgroundColor #FFE5CC
+skinparam class<<Record>>BackgroundColor #D0E1FD
+skinparam class<<external>>BackgroundColor #EAECEE
+skinparam interface<<external>>BackgroundColor #EAECEE
+
+' --- Definicion de Clasificadores (Agrupados por Paquete) ---
+package edu.unimag.modelo.constante {
+    class PoliticasAcademicas <<Final>> {
+    +  {static, readOnly} MIN_CREDITOS_MATERIA : Integer = 1
+    +  {static, readOnly} MAX_CREDITOS_MATERIA : Integer = 6
+    +  {static, readOnly} MIN_CUPO_MATERIA : Integer = 1
+    +  {static, readOnly} MAX_CUPO_MATERIA : Integer = 50
+    +  {static, readOnly} NOTA_MINIMA : Integer = 0
+    +  {static, readOnly} NOTA_MAXIMA : Integer = 500
+    +  {static, readOnly} NOTA_APROBACION : Integer = 300
+    +  {static, readOnly} PATRON_AUDITORIA : String = "yyyy-MM-dd HH:mm"
+    +  {static, readOnly} FORMATO_AUDITORIA : DateTimeFormatter = DateTimeFormatter.ofPattern(PATRON_AUDITORIA)
+    -  PoliticasAcademicas() : void <<Create>>
+    }
+}
+
+package java.util {
+    class UUID <<external>> {
+    }
+}
+
+package java.time {
+    class OffsetDateTime <<external>> {
+    }
+}
+
+package edu.unimag.modelo {
+    class Estudiante {
+    -  idEstudiante : UUID
+    -  codigoEstudiante : String
+    -  nombreEstudiante : String
+    -  direccionEstudiante : String
+    -  correoEstudiante : String
+    -  celularEstudiante : String
+    -  estadoEstudiante : EstadoEntidad
+    #  Estudiante() : void <<Create>>
+    +  Estudiante(codigoEstudiante : String, nombreEstudiante : String, correoEstudiante : String, celularEstudiante : String, direccionEstudiante : String) : void <<Create>>
+    +  Estudiante(idEstudiante : UUID, codigoEstudiante : String, nombreEstudiante : String, correoEstudiante : String, celularEstudiante : String, direccionEstudiante : String, estadoEstudiante : EstadoEntidad) : void <<Create>>
+    +  actualizarCorreo(nuevoCorreo : String) : void
+    +  actualizarCelular(nuevoCelular : String) : void
+    +  actualizarDireccion(nuevaDireccion : String) : void
+    +  cambiarEstado(nuevoEstado : EstadoEntidad) : void
+    +  estaActivo() : boolean
+    +  getIdEstudiante() : UUID
+    +  getCodigoEstudiante() : String
+    +  getNombreEstudiante() : String
+    +  getDireccionEstudiante() : String
+    +  getCorreoEstudiante() : String
+    +  getCelularEstudiante() : String
+    +  getEstadoEstudiante() : EstadoEntidad
+    }
+    class Programa {
+    -  idPrograma : UUID
+    -  nombrePrograma : String
+    -  nivelPrograma : NivelPrograma
+    -  facultad : Facultad
+    -  estadoPrograma : EstadoEntidad
+    #  Programa() : void <<Create>>
+    +  Programa(nombrePrograma : String, nivelPrograma : NivelPrograma, facultad : Facultad) : void <<Create>>
+    +  Programa(idPrograma : UUID, nombrePrograma : String, nivelPrograma : NivelPrograma, facultad : Facultad, estadoPrograma : EstadoEntidad) : void <<Create>>
+    +  actualizarNombre(nuevoNombre : String) : void
+    +  actualizarNivel(nuevoNivel : NivelPrograma) : void
+    +  cambiarFacultad(nuevaFacultad : Facultad) : void
+    +  suspender() : void
+    +  reactivar() : void
+    +  estaActivo() : boolean
+    +  getIdPrograma() : UUID
+    +  getNombrePrograma() : String
+    +  getNivelPrograma() : NivelPrograma
+    +  getFacultad() : Facultad
+    +  getEstadoPrograma() : EstadoEntidad
+    +  getIdFacultad() : Long
+    +  getNombreFacultad() : String
+    }
+    class PeriodoAcademico {
+    -  idPeriodoAcademico : Integer
+    -  nombrePeriodoAcademico : String
+    -  estadoPeriodoAcademico : EstadoEntidad
+    #  PeriodoAcademico() : void <<Create>>
+    +  PeriodoAcademico(nombrePeriodoAcademico : String) : void <<Create>>
+    +  PeriodoAcademico(idPeriodoAcademico : Integer, nombrePeriodoAcademico : String, estadoPeriodoAcademico : EstadoEntidad) : void <<Create>>
+    +  corregirNombre(nuevoNombre : String) : void
+    +  suspender() : void
+    +  reactivar() : void
+    +  estaActivo() : boolean
+    +  getIdPeriodoAcademico() : Integer
+    +  getNombrePeriodoAcademico() : String
+    +  getEstadoPeriodoAcademico() : EstadoEntidad
+    }
+    class PlanEstudio {
+    -  idPlanEstudio : Long
+    -  versionPlanEstudio : String
+    -  vigentePlanEstudio : EstadoEntidad
+    -  fechaCreacionPlanEstudio : OffsetDateTime
+    -  programa : Programa
+    #  PlanEstudio() : void <<Create>>
+    +  PlanEstudio(versionPlanEstudio : String, programa : Programa) : void <<Create>>
+    +  PlanEstudio(idPlanEstudio : Long, versionPlanEstudio : String, vigentePlanEstudio : EstadoEntidad, fechaCreacionPlanEstudio : OffsetDateTime, programa : Programa) : void <<Create>>
+    +  actualizarVersion(nuevaVersion : String) : void
+    +  activar() : void
+    +  inactivar() : void
+    +  estaActivo() : boolean
+    +  getIdPlanEstudio() : Long
+    +  getVersionPlanEstudio() : String
+    +  getVigentePlanEstudio() : EstadoEntidad
+    +  getFechaCreacionPlanEstudio() : OffsetDateTime
+    +  getPrograma() : Programa
+    +  getIdPrograma() : UUID
+    +  getNombrePrograma() : String
+    }
+    class CursoPeriodo {
+    -  idCursoPeriodo : UUID
+    -  nombreCursoPeriodo : String
+    -  creacionCursoPeriodo : OffsetDateTime
+    -  cupoCursoPeriodo : Integer
+    -  materia : Materia
+    -  periodoAcademico : PeriodoAcademico
+    #  CursoPeriodo() : void <<Create>>
+    +  CursoPeriodo(nombreCursoPeriodo : String, materia : Materia, periodoAcademico : PeriodoAcademico, cupoCursoPeriodo : Integer) : void <<Create>>
+    +  CursoPeriodo(idCursoPeriodo : UUID, nombreCursoPeriodo : String, creacionCursoPeriodo : OffsetDateTime, cupoCursoPeriodo : Integer, materia : Materia, periodoAcademico : PeriodoAcademico) : void <<Create>>
+    +  actualizarNombre(nuevoNombre : String) : void
+    +  actualizarCupo(nuevoCupo : Integer) : void
+    +  tieneCupoDisponible(cantidadInscritos : int) : boolean
+    +  getIdCursoPeriodo() : UUID
+    +  getNombreCursoPeriodo() : String
+    +  getCreacionCursoPeriodo() : OffsetDateTime
+    +  getCupoCursoPeriodo() : Integer
+    +  getMateria() : Materia
+    +  getPeriodoAcademico() : PeriodoAcademico
+    +  getIdMateria() : Integer
+    +  getIdPeriodoAcademico() : Integer
+    }
+    class Profesor {
+    -  idProfesor : Long
+    -  nombreProfesor : String
+    -  celularProfesor : String
+    -  estadoProfesor : EstadoEntidad
+    #  Profesor() : void <<Create>>
+    +  Profesor(nombreProfesor : String, celularProfesor : String) : void <<Create>>
+    +  Profesor(idProfesor : Long, nombreProfesor : String, celularProfesor : String, estadoProfesor : EstadoEntidad) : void <<Create>>
+    +  actualizarNombre(nuevoNombre : String) : void
+    +  actualizarCelular(nuevoCelular : String) : void
+    +  cambiarEstado(nuevoEstado : EstadoEntidad) : void
+    +  estaActivo() : boolean
+    +  getIdProfesor() : Long
+    +  getNombreProfesor() : String
+    +  getCelularProfesor() : String
+    +  getEstadoProfesor() : EstadoEntidad
+    }
+    class Materia {
+    -  idMateria : Integer
+    -  nombreMateria : String
+    -  creditosMateria : Integer
+    -  cupoMaximoMateria : Integer
+    -  estadoMateria : EstadoEntidad
+    #  Materia() : void <<Create>>
+    +  Materia(nombreMateria : String, creditosMateria : Integer, cupoMaximoMateria : Integer) : void <<Create>>
+    +  Materia(idMateria : Integer, nombreMateria : String, creditosMateria : Integer, cupoMaximoMateria : Integer, estadoMateria : EstadoEntidad) : void <<Create>>
+    +  actualizarNombre(nuevoNombre : String) : void
+    +  actualizarCupo(nuevoCupo : Integer) : void
+    +  actualizarCreditos(nuevosCreditos : Integer) : void
+    +  suspender() : void
+    +  reactivar() : void
+    +  estaActiva() : boolean
+    +  getIdMateria() : Integer
+    +  getNombreMateria() : String
+    +  getCreditosMateria() : Integer
+    +  getCupoMaximoMateria() : Integer
+    +  getEstadoMateria() : EstadoEntidad
+    }
+    class FormacionProfesor {
+    -  idFormacionProfesor : Long
+    -  profesor : Profesor
+    -  tituloFormacionProfesor : String
+    -  fechaFormacionProfesor : OffsetDateTime
+    #  FormacionProfesor() : void <<Create>>
+    +  FormacionProfesor(profesor : Profesor, tituloFormacionProfesor : String, fechaFormacionProfesor : OffsetDateTime) : void <<Create>>
+    +  FormacionProfesor(idFormacionProfesor : Long, profesor : Profesor, tituloFormacionProfesor : String, fechaFormacionProfesor : OffsetDateTime) : void <<Create>>
+    +  actualizarTitulo(nuevoTitulo : String) : void
+    +  actualizarFecha(nuevaFecha : OffsetDateTime) : void
+    +  getIdFormacionProfesor() : Long
+    +  getProfesor() : Profesor
+    +  getTituloFormacionProfesor() : String
+    +  getFechaFormacionProfesor() : OffsetDateTime
+    +  getIdProfesor() : Long
+    }
+    class Facultad {
+    -  idFacultad : Long
+    -  nombreFacultad : String
+    -  estadoFacultad : EstadoEntidad
+    #  Facultad() : void <<Create>>
+    +  Facultad(nombreFacultad : String) : void <<Create>>
+    +  Facultad(idFacultad : Long, nombreFacultad : String, estadoFacultad : EstadoEntidad) : void <<Create>>
+    +  actualizarNombre(nuevoNombre : String) : void
+    +  suspender() : void
+    +  reactivar() : void
+    +  estaActiva() : boolean
+    +  getIdFacultad() : Long
+    +  getNombreFacultad() : String
+    +  getEstadoFacultad() : EstadoEntidad
+    }
+    class CursoProfesor {
+    -  idCursoProfesorPeriodo : CursoProfesorPk
+    -  fechaAsisgnacion : OffsetDateTime
+    -  tipoAsignacion : TipoAsignacion
+    -  estado : EstadoProfesorCurso
+    #  CursoProfesor() : void <<Create>>
+    +  CursoProfesor(idCursoProfesorPeriodo : CursoProfesorPk, tipoAsignacion : TipoAsignacion) : void <<Create>>
+    +  CursoProfesor(idCursoProfesorPeriodo : CursoProfesorPk, fechaAsisgnacion : OffsetDateTime, tipoAsignacion : TipoAsignacion, estado : EstadoProfesorCurso) : void <<Create>>
+    +  actualizarTipoAsig(nuevo : TipoAsignacion) : void
+    +  retirar() : void
+    +  reactivar() : void
+    +  estaActivo() : boolean
+    +  getIdCursoProfesorPeriodo() : CursoProfesorPk
+    +  getFechaAsisgnacion() : OffsetDateTime
+    +  getTipoAsignacion() : TipoAsignacion
+    +  getEstado() : EstadoProfesorCurso
+    +  getIdProfesor() : Long
+    +  getIdCurso() : UUID
+    +  getProfesor() : Profesor
+    +  getCursoPeriodo() : CursoPeriodo
+    }
+}
+
+package com.cleandev.tpa.api.converter {
+    class CodedEnum <<external>> {
+    }
+    class BaseCodedEnumConverter <<external>> {
+    }
+}
+
+package edu.unimag.modelo.pk {
+    class CursoProfesorPk {
+    -  {readOnly} cursoPeriodo : CursoPeriodo
+    -  {readOnly} profesor : Profesor
+    #  CursoProfesorPk() : void <<Create>>
+    +  CursoProfesorPk(cursoPeriodo : CursoPeriodo, profesor : Profesor) : void <<Create>>
+    +  getCursoPeriodo() : CursoPeriodo
+    +  getProfesor() : Profesor
+    +  getIdCusrso() : UUID
+    +  getIdProfesor() : Long
+    +  hashCode() : int
+    +  equals(obj : Object) : boolean
+    +  toString() : String
+    }
+}
+
+package edu.unimag.modelo.convertidor {
+    class TipoAsignacionConverter {
+    #  getEnumClass() : Class<TipoAsignacion>
+    }
+    class EstadoProfesorCursoCoverter {
+    #  getEnumClass() : Class<EstadoProfesorCurso>
+    }
+    class EstadoEntidadConverter {
+    #  getEnumClass() : Class<EstadoEntidad>
+    }
+    class NivelProgramaConverter {
+    #  getEnumClass() : Class<NivelPrograma>
+    }
+}
+
+package edu.unimag.modelo.enumeracion {
+    enum NivelPrograma {
+    +  {static, readOnly} TECNICO : NivelPrograma
+    +  {static, readOnly} TECNOLOGICO : NivelPrograma
+    +  {static, readOnly} PREGRADO : NivelPrograma
+    +  {static, readOnly} ESPECIALIZACION : NivelPrograma
+    +  {static, readOnly} MAESTRIA : NivelPrograma
+    +  {static, readOnly} DOCTORADO : NivelPrograma
+    -  {readOnly} code : int
+    -  {readOnly} description : String
+    ~  NivelPrograma(code : int, description : String) : void <<Create>>
+    +  getCode() : int
+    +  getDescription() : String
+    }
+    enum TipoAsignacion {
+    +  {static, readOnly} PROFESOR_PRINCIPAL : TipoAsignacion
+    +  {static, readOnly} PROFESOR_ACOMPANANTE : TipoAsignacion
+    +  {static, readOnly} AUDITOR : TipoAsignacion
+    -  {readOnly} code : int
+    -  {readOnly} description : String
+    ~  TipoAsignacion(code : int, description : String) : void <<Create>>
+    +  getCode() : int
+    +  getDescription() : String
+    }
+    enum EstadoProfesorCurso {
+    +  {static, readOnly} ACTIVO : EstadoProfesorCurso
+    +  {static, readOnly} RETIRADO : EstadoProfesorCurso
+    -  code : int
+    -  description : String
+    -  EstadoProfesorCurso(code : int, description : String) : void <<Create>>
+    +  getCode() : int
+    +  getDescription() : String
+    +  cambiarEstado(nuevo : EstadoProfesorCurso) : EstadoProfesorCurso
+    }
+    enum EstadoEntidad {
+    +  {static, readOnly} ACTIVO : EstadoEntidad
+    +  {static, readOnly} INACTIVO : EstadoEntidad
+    -  {readOnly} code : int
+    -  {readOnly} description : String
+    ~  EstadoEntidad(code : int, description : String) : void <<Create>>
+    +  getCode() : int
+    +  getDescription() : String
+    +  cambiarEstadoA(nuevoEstado : EstadoEntidad) : EstadoEntidad
+    }
+}
+
+' --- Grafo de relaciones ---
+edu.unimag.modelo.Materia "1" --> "1" edu.unimag.modelo.enumeracion.EstadoEntidad
+edu.unimag.modelo.CursoProfesor "1" --> "1" edu.unimag.modelo.enumeracion.TipoAsignacion
+edu.unimag.modelo.Programa ..> java.util.UUID : <<use>>
+edu.unimag.modelo.CursoProfesor ..> edu.unimag.modelo.CursoPeriodo : <<use>>
+edu.unimag.modelo.CursoProfesor ..> java.time.OffsetDateTime : <<use>>
+com.cleandev.tpa.api.converter.BaseCodedEnumConverter <|-- edu.unimag.modelo.convertidor.NivelProgramaConverter
+edu.unimag.modelo.CursoProfesor ..> edu.unimag.modelo.Profesor : <<use>>
+com.cleandev.tpa.api.converter.CodedEnum <|.. edu.unimag.modelo.enumeracion.EstadoEntidad
+edu.unimag.modelo.PlanEstudio ..> java.util.UUID : <<use>>
+edu.unimag.modelo.CursoPeriodo "1" --> "1" edu.unimag.modelo.Materia
+edu.unimag.modelo.CursoProfesor "1" --> "1" edu.unimag.modelo.pk.CursoProfesorPk
+edu.unimag.modelo.Estudiante ..> java.util.UUID : <<use>>
+edu.unimag.modelo.CursoPeriodo ..> java.util.UUID : <<use>>
+edu.unimag.modelo.Programa "1" --> "1" edu.unimag.modelo.enumeracion.EstadoEntidad
+edu.unimag.modelo.FormacionProfesor "1" --> "1" edu.unimag.modelo.Profesor
+com.cleandev.tpa.api.converter.CodedEnum <|.. edu.unimag.modelo.enumeracion.EstadoProfesorCurso
+com.cleandev.tpa.api.converter.BaseCodedEnumConverter <|-- edu.unimag.modelo.convertidor.EstadoEntidadConverter
+edu.unimag.modelo.PeriodoAcademico "1" --> "1" edu.unimag.modelo.enumeracion.EstadoEntidad
+edu.unimag.modelo.PlanEstudio "1" --> "1" edu.unimag.modelo.enumeracion.EstadoEntidad
+edu.unimag.modelo.CursoProfesor ..> java.util.UUID : <<use>>
+com.cleandev.tpa.api.converter.CodedEnum <|.. edu.unimag.modelo.enumeracion.NivelPrograma
+edu.unimag.modelo.Programa "1" --> "1" edu.unimag.modelo.enumeracion.NivelPrograma
+edu.unimag.modelo.Facultad "1" --> "1" edu.unimag.modelo.enumeracion.EstadoEntidad
+edu.unimag.modelo.CursoPeriodo "1" --> "1" edu.unimag.modelo.PeriodoAcademico
+edu.unimag.modelo.Estudiante "1" --> "1" edu.unimag.modelo.enumeracion.EstadoEntidad
+edu.unimag.modelo.convertidor.EstadoProfesorCursoCoverter ..> edu.unimag.modelo.enumeracion.EstadoProfesorCurso : <<use>>
+edu.unimag.modelo.Programa "1" --> "1" edu.unimag.modelo.Facultad
+edu.unimag.modelo.pk.CursoProfesorPk ..> java.util.UUID : <<use>>
+edu.unimag.modelo.CursoPeriodo ..> java.time.OffsetDateTime : <<use>>
+edu.unimag.modelo.pk.CursoProfesorPk "1" --> "1" edu.unimag.modelo.Profesor
+edu.unimag.modelo.PlanEstudio ..> java.time.OffsetDateTime : <<use>>
+edu.unimag.modelo.PlanEstudio "1" --> "1" edu.unimag.modelo.Programa
+edu.unimag.modelo.convertidor.EstadoEntidadConverter ..> edu.unimag.modelo.enumeracion.EstadoEntidad : <<use>>
+com.cleandev.tpa.api.converter.CodedEnum <|.. edu.unimag.modelo.enumeracion.TipoAsignacion
+com.cleandev.tpa.api.converter.BaseCodedEnumConverter <|-- edu.unimag.modelo.convertidor.TipoAsignacionConverter
+edu.unimag.modelo.CursoProfesor "1" --> "1" edu.unimag.modelo.enumeracion.EstadoProfesorCurso
+edu.unimag.modelo.convertidor.NivelProgramaConverter ..> edu.unimag.modelo.enumeracion.NivelPrograma : <<use>>
+edu.unimag.modelo.pk.CursoProfesorPk "1" --> "1" edu.unimag.modelo.CursoPeriodo
+edu.unimag.modelo.Profesor "1" --> "1" edu.unimag.modelo.enumeracion.EstadoEntidad
+edu.unimag.modelo.FormacionProfesor ..> java.time.OffsetDateTime : <<use>>
+edu.unimag.modelo.convertidor.TipoAsignacionConverter ..> edu.unimag.modelo.enumeracion.TipoAsignacion : <<use>>
+com.cleandev.tpa.api.converter.BaseCodedEnumConverter <|-- edu.unimag.modelo.convertidor.EstadoProfesorCursoCoverter
+
+@enduml
