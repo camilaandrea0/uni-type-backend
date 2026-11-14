@@ -16,7 +16,8 @@ import edu.unimag.vista.FacultadVista;
 public class ConfiguracionModuloFacultad implements ModuloConfigurable {
 
     private final FacultadRepositorio facultadRepositorio;
-
+    private final FacultadServicio facultadServicio;
+    
     public ConfiguracionModuloFacultad() {
         boolean necesitaUUID = false;
         TpaRepository<Facultad, Long> tpaEngine = TpaRepositoryFactory.create(
@@ -25,17 +26,23 @@ public class ConfiguracionModuloFacultad implements ModuloConfigurable {
                 necesitaUUID
         );
         this.facultadRepositorio = new FacultadRepositorioImpl(tpaEngine);
+        FacultadMapeador mapper = new FacultadMapeador();
+       facultadServicio= new FacultadServicio(facultadRepositorio, mapper);
     }
 
     public FacultadRepositorio getFacultadRepositorio() {
         return facultadRepositorio;
     }
 
+    public FacultadServicio getFacultadServicio() {
+        return facultadServicio;
+    }
+
+    
     @Override
     public SystemModule construirVista() {
-        FacultadMapeador mapper = new FacultadMapeador();
-        FacultadServicio service = new FacultadServicio(this.facultadRepositorio, mapper);
-        FacultadControlador controller = new FacultadControlador(service);
+        
+        FacultadControlador controller = new FacultadControlador(facultadServicio);
         return new FacultadVista(controller);
     }
 

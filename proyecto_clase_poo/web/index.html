@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administración de recursos Unimagdalena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+  
+</head>
+<body>
+  <div class="decoracion" aria-hidden="true"><div class="puntos"></div></div>}
+  
+  <header class="barra">
+    <img class="logo" src="img\logo.png" alt="Universidad del Magdalena, 1962">
+    <h1>Administración de recursos Unimagdalena</h1>
+    <button class="menu-btn" type="button" aria-label="Abrir menú de módulos" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <nav id="menu" class="menu" aria-label="Módulos" hidden>
+    <ul id="menu-lista"></ul>
+  </nav>
+
+  <main>
+    <section class="intro">
+      <p>En esta página podrás manejar los recursos existentes, tanto humanos como académicos, como los profesores, los estudiantes y los cursos.</p>
+    </section>
+
+    <section id="modulos" class="modulos" aria-label="Módulos disponibles"></section>
+  </main>
+
+  <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>

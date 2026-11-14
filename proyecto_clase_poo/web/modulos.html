@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Módulo - Unimagdalena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+  <link rel="stylesheet" href="css/modulo.css">
+</head>
+<body>
+  <div class="decoracion" aria-hidden="true"><div class="puntos"></div></div>
+
+  <header class="barra">
+    <a href="index.html" class="logo-enlace" aria-label="Volver al inicio">
+        <img class="logo" src="img\logo.png" alt="Universidad del Magdalena, 1962">
+    </a>
+
+    <h1 id="titulo-pagina">Módulo</h1>
+
+    <button class="menu-btn" type="button" aria-label="Abrir menú de módulos" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <nav id="menu" class="menu" aria-label="Módulos" hidden>
+    <ul id="menu-lista"></ul>
+  </nav>
+
+  <main class="pagina">
+    <div id="acciones" class="acciones"></div>
+    <section id="panel" class="panel" aria-live="polite"></section>
+  </main>
+
+  <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js" defer></script>
+  <script src="js/modulo.js" defer></script>
+</body>
+</html>

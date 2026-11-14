@@ -19,6 +19,8 @@ public class ConfiguracionModuloFormacionProfesor implements ModuloConfigurable 
 
     private final FormacionProfesorRepositorio formacionProfesorRepositorio;
     private final ProfesorRepositorio profesorRepositorio;
+    private final FormacionProfesorServicio formacionProfesorServicio;
+    
 
     public ConfiguracionModuloFormacionProfesor(ProfesorRepositorio profesorRepoCompartido) {
         if (profesorRepoCompartido == null) {
@@ -33,24 +35,22 @@ public class ConfiguracionModuloFormacionProfesor implements ModuloConfigurable 
                 necesitaUUID
         );
         this.formacionProfesorRepositorio = new FormacionProfesorRepositorioImpl(tpaFormacion);
+        ProfesorMapeador profesorMapeador= new ProfesorMapeador();
+        FormacionProfesorMapeador mapeador = new FormacionProfesorMapeador(profesorMapeador);
+        formacionProfesorServicio= new FormacionProfesorServicio(formacionProfesorRepositorio, profesorRepositorio, mapeador);
     }
 
     public FormacionProfesorRepositorio getFormacionRepositorio() {
         return formacionProfesorRepositorio;
     }
 
+    public FormacionProfesorServicio getFormacionProfesorServicio() {
+        return formacionProfesorServicio;
+    }
+
     @Override
     public SystemModule construirVista() {
-        ProfesorMapeador profesorMapper = new ProfesorMapeador();
-        FormacionProfesorMapeador mapeador = new FormacionProfesorMapeador(profesorMapper);
-
-        FormacionProfesorServicio service = new FormacionProfesorServicio(
-                this.formacionProfesorRepositorio,
-                this.profesorRepositorio,
-                mapeador
-        );
-
-        FormacionProfesorControlador controller = new FormacionProfesorControlador(service);
+        FormacionProfesorControlador controller = new FormacionProfesorControlador(formacionProfesorServicio);
         return new FormacionProfesorVista(controller);
     }
 

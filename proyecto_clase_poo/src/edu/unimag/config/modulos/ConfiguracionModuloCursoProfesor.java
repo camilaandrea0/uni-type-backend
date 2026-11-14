@@ -33,6 +33,7 @@ public class ConfiguracionModuloCursoProfesor implements ModuloConfigurable{
     private final ProfesorServicio profesorServicio;
     private final MateriaRepositorio materiaRepositorio;
     private final PeriodoAcademicoRepositorio academicoRepositorio;
+    private final CursoProfesorServicio cursoProfesorServicio;
 
     public ConfiguracionModuloCursoProfesor(CursoPeriodoRepositorio cursoPeriodoRepositorio, CursoPeriodoServicio cursoPeriodoServicio, ProfesorRepositorio profesorRepositorio, ProfesorServicio profesorServicio, MateriaRepositorio materiaRepositorio, PeriodoAcademicoRepositorio academicoRepositorio) {
         
@@ -60,17 +61,24 @@ public class ConfiguracionModuloCursoProfesor implements ModuloConfigurable{
         TpaRepository<CursoProfesor, CursoProfesorPk> tpaEngine= TpaRepositoryFactory.create(CursoProfesor.class, RutaPersistencia.CURSOS_PROFESORES.obtenerRuta(), necesitaUUID);
         this.cursoProfesorRepositorio = new CursoProfesorRepositorioImpl(tpaEngine);
         
-    }
-
-    @Override
-    public SystemModule construirVista() {
         MateriaMapeador materiaMapeador= new MateriaMapeador();
         PeriodoAcademicoMapeador periodoAcademicoMapeador=new PeriodoAcademicoMapeador();
         CursoPeriodoMapeador cursoPeriodoMapeador= new CursoPeriodoMapeador(materiaMapeador, periodoAcademicoMapeador);
         ProfesorMapeador profesorMapeador= new ProfesorMapeador();
-       MapeadorCursoProfesor mapeadorCursoProfesor= new MapeadorCursoProfesor(profesorMapeador, cursoPeriodoMapeador);
-        CursoProfesorServicio servicio= new CursoProfesorServicio(cursoProfesorRepositorio, cursoPeriodoRepositorio, mapeadorCursoProfesor, academicoRepositorio, materiaRepositorio, profesorRepositorio);
-        ControladorCursoProfesor controller= new ControladorCursoProfesor(cursoPeriodoServicio, profesorServicio, servicio);
+        MapeadorCursoProfesor mapeadorCursoProfesor= new MapeadorCursoProfesor(profesorMapeador, cursoPeriodoMapeador);
+        this.cursoProfesorServicio = new CursoProfesorServicio(this.cursoProfesorRepositorio,
+               this.cursoPeriodoRepositorio,
+                mapeadorCursoProfesor,
+                this.academicoRepositorio,
+                this.materiaRepositorio,
+                this.profesorRepositorio);
+    }   
+        
+
+    @Override
+    public SystemModule construirVista() {
+       
+     ControladorCursoProfesor controller= new ControladorCursoProfesor(cursoPeriodoServicio,profesorServicio,cursoProfesorServicio );
         
         return new CursoProfesorVista(controller);
     }
@@ -82,10 +90,14 @@ public class ConfiguracionModuloCursoProfesor implements ModuloConfigurable{
         }
     }
 
+    public CursoProfesorRepositorio getCursoProfesorRepositorio() {
+        return cursoProfesorRepositorio;
+    }
+
+    public CursoProfesorServicio getCursoProfesorServicio() {
+        return cursoProfesorServicio;
+    }
+
     
-    
-    
-    
-   
-    
+
 }
